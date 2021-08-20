@@ -141,7 +141,8 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                            // inspects response and processes further if needed (e.g. authorization
                            // code exchange)
                            if (authorizationResponse) {
-                             if ([authorizationRequest.responseType
+                           //  to get the authcode only
+                            /* if ([authorizationRequest.responseType
                                      isEqualToString:OKTResponseTypeCode]) {
                                // if the request is for the code flow (NB. not hybrid), assumes the
                                // code is intended for this client, and performs the authorization
@@ -169,10 +170,11 @@ static const NSUInteger kExpiryTimeTolerance = 60;
                                // 2. The code is for this client and, for security reasons, the
                                //    application developer must verify the id_token signature and
                                //    c_hash before calling the token endpoint
+                             */
                                OKTAuthState *authState = [[OKTAuthState alloc]
                                    initWithAuthorizationResponse:authorizationResponse];
                                callback(authState, authorizationError);
-                             }
+                            // }
                            } else {
                              callback(nil, authorizationError);
                            }
