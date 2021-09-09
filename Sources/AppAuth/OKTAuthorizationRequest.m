@@ -171,8 +171,8 @@ NSString *const OKTOAuthorizationRequestCodeChallengeMethodS256 = @"S256";
     additionalParameters:(nullable NSDictionary<NSString *, NSString *> *)additionalParameters {
 
   // generates PKCE code verifier and challenge
-  NSString *codeVerifier = [[self class] generateCodeVerifier];
-  NSString *codeChallenge = [[self class] codeChallengeS256ForVerifier:codeVerifier];
+  NSString *codeVerifier = nil;//[[self class] generateCodeVerifier];
+  NSString *codeChallenge = nil;//[[self class] codeChallengeS256ForVerifier:codeVerifier];
 
   return [self initWithConfiguration:configuration
                             clientId:clientID
@@ -184,7 +184,30 @@ NSString *const OKTOAuthorizationRequestCodeChallengeMethodS256 = @"S256";
                                nonce:[[self class] generateState]
                         codeVerifier:codeVerifier
                        codeChallenge:codeChallenge
-                 codeChallengeMethod:OKTOAuthorizationRequestCodeChallengeMethodS256
+                 codeChallengeMethod:nil
+                additionalParameters:additionalParameters];
+}
+- (instancetype)
+   initForAuthCodeWithConfiguration:(OKTServiceConfiguration *)configuration
+                clientId:(NSString *)clientID
+                  scopes:(nullable NSArray<NSString *> *)scopes
+             redirectURL:(NSURL *)redirectURL
+            responseType:(NSString *)responseType
+    additionalParameters:(nullable NSDictionary<NSString *, NSString *> *)additionalParameters {
+
+
+
+  return [self initWithConfiguration:configuration
+                            clientId:clientID
+                        clientSecret:nil
+                               scope:[OKTScopeUtilities scopesWithArray:scopes]
+                         redirectURL:redirectURL
+                        responseType:responseType
+                               state:[[self class] generateState]
+                               nonce:[[self class] generateState]
+                        codeVerifier:nil
+                       codeChallenge:nil
+                 codeChallengeMethod:nil
                 additionalParameters:additionalParameters];
 }
 

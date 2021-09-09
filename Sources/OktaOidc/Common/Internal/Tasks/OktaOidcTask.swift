@@ -24,7 +24,7 @@ class OktaOidcTask {
     }
 
     func downloadOidcConfiguration(callback: @escaping (OKTServiceConfiguration?, OktaOidcError?) -> Void) {
-        guard let configUrl = URL(string: "\(config.issuer)/.well-known/openid-configuration") else {
+        guard let configUrl = URL(string: "\(config.issuer)/default/.well-known/openid-configuration") else {
             DispatchQueue.main.async {
                 callback(nil, OktaOidcError.noDiscoveryEndpoint)
             }

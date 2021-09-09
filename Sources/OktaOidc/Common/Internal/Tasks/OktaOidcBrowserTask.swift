@@ -20,7 +20,7 @@ class OktaOidcBrowserTask: OktaOidcTask {
 
     var userAgentSession: OKTExternalUserAgentSession?
     
-    func signIn(delegate: OktaNetworkRequestCustomizationDelegate? = nil,
+  func signIn(authCodeOnly: Bool, delegate: OktaNetworkRequestCustomizationDelegate? = nil,
                 callback: @escaping ((OKTAuthState?, OktaOidcError?) -> Void)) {
         self.downloadOidcConfiguration() { oidConfig, error in
             guard let oidConfiguration = oidConfig else {
@@ -32,13 +32,23 @@ class OktaOidcBrowserTask: OktaOidcTask {
                 callback(nil, .missingConfigurationValues)
                 return
             }
-
-            let request = OKTAuthorizationRequest(configuration: oidConfiguration,
+          var request: OKTAuthorizationRequest
+          if authCodeOnly {
+            request = OKTAuthorizationRequest(forAuthCodeWith: oidConfiguration, clientId: self.config.clientId, scopes: OktaOidcUtils.scrubScopes(self.config.scopes), redirectURL: successRedirectURL, responseType: OKTResponseTypeCode, additionalParameters: self.config.additionalParams)
+          } else {
+            request = OKTAuthorizationRequest(configuration: oidConfiguration,
+                                                   clientId: self.config.clientId,
+                                                   scopes: OktaOidcUtils.scrubScopes(self.config.scopes),
+                                                   redirectURL: successRedirectURL,
+                                                   responseType: OKTResponseTypeCode,
+                                                   additionalParameters: self.config.additionalParams)
+          }
+           /* let request = OKTAuthorizationRequest(configuration: oidConfiguration,
                                                   clientId: self.config.clientId,
                                                   scopes: OktaOidcUtils.scrubScopes(self.config.scopes),
                                                   redirectURL: successRedirectURL,
                                                   responseType: OKTResponseTypeCode,
-                                                  additionalParameters: self.config.additionalParams)
+                                                  additionalParameters: self.config.additionalParams)*/
             guard let externalUserAgent = self.externalUserAgent() else {
                 callback(nil, OktaOidcError.APIError("Authorization Error: \(error?.localizedDescription ?? "No external User Agent.")"))
                 return

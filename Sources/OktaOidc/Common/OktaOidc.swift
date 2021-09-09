@@ -56,11 +56,11 @@ public class OktaOidc: NSObject {
         return currentUserSessionTask != nil
     }
 
-    func signInWithBrowserTask(_ task: OktaOidcBrowserTask,
+  func signInWithBrowserTask(_ task: OktaOidcBrowserTask, authCodeOnly: Bool,
                                callback: @escaping ((OktaOidcStateManager?, Error?) -> Void)) {
         currentUserSessionTask = task
 
-        task.signIn(delegate: configuration.requestCustomizationDelegate) { [weak self] authState, error in
+      task.signIn(authCodeOnly: authCodeOnly, delegate: configuration.requestCustomizationDelegate) { [weak self] authState, error in
             defer { self?.currentUserSessionTask = nil }
             guard let authState = authState else {
                 callback(nil, error)
@@ -72,7 +72,7 @@ public class OktaOidc: NSObject {
                 authStateManager.requestCustomizationDelegate = delegate
             }
             callback(authStateManager, nil)
-        }
+      }
     }
 
     func signOutWithBrowserTask(_ task: OktaOidcBrowserTask,

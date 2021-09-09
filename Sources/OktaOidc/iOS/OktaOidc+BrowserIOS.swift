@@ -32,11 +32,16 @@ extension OktaOidc: OktaOidcBrowserProtocolIOS {
             callback(nil, error)
             return
         }
+
+      var authCodeOnly = false
+      if additionalParameters["authCodeOnly"]?.lowercased() == "true" { 
+        authCodeOnly = true
+      }
             
         let oktaAPI = OktaOidcRestApi()
         oktaAPI.requestCustomizationDelegate = config.requestCustomizationDelegate
         let signInTask = OktaOidcBrowserTaskIOS(presenter: presenter, config: config, oktaAPI: oktaAPI)
-        signInWithBrowserTask(signInTask, callback: callback)
+      signInWithBrowserTask(signInTask, authCodeOnly: authCodeOnly, callback: callback)
     }
 
     @objc public func signOutOfOkta(_ authStateManager: OktaOidcStateManager,

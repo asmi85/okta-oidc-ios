@@ -182,6 +182,14 @@ extern NSString *const OKTOAuthorizationRequestCodeChallengeMethodS256;
              responseType:(NSString *)responseType
      additionalParameters:(nullable NSDictionary<NSString *, NSString *> *)additionalParameters;
 
+- (instancetype)
+   initForAuthCodeWithConfiguration:(OKTServiceConfiguration *)configuration
+                clientId:(NSString *)clientID
+                  scopes:(nullable NSArray<NSString *> *)scopes
+             redirectURL:(NSURL *)redirectURL
+            responseType:(NSString *)responseType
+additionalParameters:(nullable NSDictionary<NSString *, NSString *> *)additionalParameters;
+
 /*! @brief Designated initializer.
     @param configuration The service's configuration.
     @param clientID The client identifier.
